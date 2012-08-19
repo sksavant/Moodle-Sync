@@ -1,3 +1,7 @@
+Gnome-Applet
+=================
+A Gnome Applet with a Daemon. A option to choose sync from applet should initiate sync function
+
 
 Moodle-Sync
 =================
