@@ -124,6 +124,7 @@ class AppForm(QMainWindow):
         self.pdfGet = QCheckBox("Get PDFs as well")
         self.pdfGet.setCheckState(Qt.Checked)
         self.pdfGet.setCheckable(True)
+
         self.setCentralWidget(self.main_frame)
         self.main_frame_box.addWidget(self.pdfGet)
         self.main_frame_box.addWidget(self.start_sync)

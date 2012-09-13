@@ -3,7 +3,7 @@
 import re
 import mechanize
 import urllib, os
-
+from BeautifulSoup import BeautifulSoup
 class Sync:
     def __init__(self,username,password):
         self.username = username
@@ -47,11 +47,18 @@ class Sync:
             self.br.open(self.courses[course].url)
             assert self.br.viewing_html()
             allFiles = {}
-
-            for link in self.br.links():
+            links=self.br.links()
+            for link in links:
                 if "mod/resource/view" in link.url:
-                    name=link.text.replace('[IMG]','')
-                    allFiles[name] = link
+                    name=link.text.replace('[IMG]','').replace('File ','')
+                    allFiles[name] = link.url
+                if "mod/folder" in link.url:
+                    fullTxt=self.br.open(link.url)
+                    links2=BeautifulSoup(fullTxt).findAll('a')
+                    for link2 in links2:
+                        if "mod_folder" in link2['href']:
+                            name=link2.findAll('span')[1].string.replace('[IMG]','').replace('File ','').rsplit('.',2)[0]
+                            allFiles[name]=link2['href']
             if(not(os.path.isdir(course))):
     			os.mkdir(course)
 
@@ -65,15 +72,17 @@ class Sync:
                 else:
                     afilename=afile
                     print [afilename]
+
+						
                 if (not(afilename in storedFiles)):
-                	response=self.br.open(allFiles[afile].url)
+                	response=self.br.open(allFiles[afile])
                 	if(self.getpdf):
                 		if (response.info()["Content-type"].split(";")[0]=="text/html"):
 							for link in self.br.links():
-								if (link.url.find("pluginfile.php")!=-1):
-									response=self.br.open(link.url)
+								if (link.find("pluginfile.php")!=-1):
+									response=self.br.open(link)
                 	extension=response.geturl().rsplit('.',1)[1]
-                	save_path=os.path.join(self.folderNames[course]+'/',afilename+'.'+extension)
+                	save_path=os.path.join(self.folderNames[course]+'/',afilename+'.'+extension.split('?')[0])
                 	output=open(save_path,'w')
                 	output.write(response.read())
                 	output.close()

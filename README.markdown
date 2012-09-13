@@ -21,7 +21,7 @@ Dependencies
  
 python-qt4
 python-mechanize
-
+python-beautifulsoup
 
 Authors
 -------
