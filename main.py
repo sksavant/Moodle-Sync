@@ -101,7 +101,7 @@ class Sync:
                                 if (link.url.find("pluginfile.php")!=-1):
                                     response=self.br.open(link.url)
                     extension=response.geturl().rsplit('.',1)[1].split('?')[0]
-                    save_path=os.path.join(self.folderNames[course]+'/',afilename.replace("/","_")+'.'+extension.replace('/','_'))
+                    save_path=os.path.join(self.folderNames[course]+'/',afilename+'.'+extension.replace('/','_'))
                     output=open(save_path,'w')
                     output.write(response.read())
                     output.close()
