@@ -61,7 +61,7 @@ class Sync:
                             name=link2.findAll('span')[1].string.replace('[IMG]','').replace('File ','') #.rsplit('.',2)[0]
                             allFiles[name]=link2['href']+"@"+dirName
             if(not(os.path.isdir(course))):
-    	           os.mkdir(course)
+                os.mkdir(course)
 
             storedFiles=os.listdir(self.folderNames[course])
             for i in xrange(0,len(storedFiles)):
@@ -75,16 +75,16 @@ class Sync:
                     afilename=afile
                     print [afilename]
                 if "mod_folder" in allFiles[afile]:
-                    dirName=allFiles[afile].split('@')[1] 
+                    dirName=allFiles[afile].split('@')[1]
                     relDir=allFiles[afile].split('@')[0].split('mod_folder/content/')[1].split('/',1)[1].replace('%20',' ')
                     if not os.path.exists(self.folderNames[course]+'/'+dirName):
                         os.makedirs(self.folderNames[course]+'/'+dirName)
                         output=open(self.folderNames[course]+'/'+dirName+'/.synced','w')
                         output.write('')
-                        output.close()                        
+                        output.close()
                     for line in open(self.folderNames[course]+'/'+dirName+'/.synced','r').readlines():
-					    if relDir in line:
-						    flag=True
+                        if relDir in line:
+                            flag=True
                     if not(flag):
                         output=open(self.folderNames[course]+'/'+dirName+'/.synced','a')
                         output.write(relDir+'\n')
@@ -94,15 +94,15 @@ class Sync:
                              os.makedirs(d)
                     afilename=(dirName+'/'+relDir).rsplit('.',2)[0]
                 if (not((afilename in storedFiles)  or flag)):
-                	response=self.br.open(allFiles[afile])
-                	if(self.getpdf):
-                		if (response.info()["Content-type"].split(";")[0]=="text/html"):
-							for link in self.br.links():
-								if (link.find("pluginfile.php")!=-1):
-									response=self.br.open(link)
-                	extension=response.geturl().rsplit('.',1)[1].split('?')[0]
-                	save_path=os.path.join(self.folderNames[course]+'/',afilename+'.'+extension)
-                	output=open(save_path,'w')
-                	output.write(response.read())
-                	output.close()
+                    response=self.br.open(allFiles[afile])
+                    if(self.getpdf):
+                        if (response.info()["Content-type"].split(";")[0]=="text/html"):
+                            for link in self.br.links():
+                                if (str(link).find("pluginfile.php")!=-1):
+                                    response=self.br.open(link.url)
+                    extension=response.geturl().rsplit('.',1)[1].split('?')[0]
+                    save_path=os.path.join(self.folderNames[course]+'/',afilename.replace("/","_")+'.'+extension.replace('/','_'))
+                    output=open(save_path,'w')
+                    output.write(response.read())
+                    output.close()
 
