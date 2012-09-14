@@ -98,7 +98,7 @@ class Sync:
                     if(self.getpdf):
                         if (response.info()["Content-type"].split(";")[0]=="text/html"):
                             for link in self.br.links():
-                                if (str(link).find("pluginfile.php")!=-1):
+                                if (link.url.find("pluginfile.php")!=-1):
                                     response=self.br.open(link.url)
                     extension=response.geturl().rsplit('.',1)[1].split('?')[0]
                     save_path=os.path.join(self.folderNames[course]+'/',afilename.replace("/","_")+'.'+extension.replace('/','_'))
